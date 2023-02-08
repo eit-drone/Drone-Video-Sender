@@ -3,10 +3,12 @@ do
   echo " ########################### "
   echo ""
   echo "  Launching RTMP server..."
+  echo "    RTMP in: ${1:-rtmp://localhost:8889/live/app}"
+  echo "    RTMP out: ${2:-rtmp://localhost:1935/live/app}"
   echo ""
   echo " ########################### "
   
-  ffmpeg -f flv -listen 1 -i ${1:-rtmp://172.20.10.12:8889/live/app} -c copy -f flv -listen 1 ${2:-rtmp://localhost:1935/live/app}
+  ffmpeg -f live_flv -listen 1 -i ${1:-rtmp://localhost:8889/live/app} -c copy -f flv -listen 1 ${2:-rtmp://localhost:1935/live/app} -loglevel debug
   
   echo " ########################### "
   echo ""
