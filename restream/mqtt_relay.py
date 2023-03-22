@@ -1,10 +1,9 @@
 import cv2
 import paho.mqtt.client as mqtt
-import struct
 from mqtt_options import MQTT_BROKER, MQTT_TOPIC, MQTT_PASS, MQTT_USER, make_timing_data
 from camera_handle import start_webcam, stop_webcam
 
-SKIP_FRAMES = 10
+SKIP_FRAMES = 5
 
 
 def start_relay():
