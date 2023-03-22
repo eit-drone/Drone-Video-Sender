@@ -1,14 +1,15 @@
 import cv2
 import paho.mqtt.client as mqtt
 import struct
-from mqtt_options import MQTT_BROKER, MQTT_TOPIC
+from mqtt_options import MQTT_BROKER, MQTT_TOPIC, MQTT_PASS, MQTT_USER
 from camera_handle import start_webcam, stop_webcam
 
 SKIP_FRAMES = 30
 
+
 def start_relay():
     client = mqtt.Client()
-    #client.username_pw_set(MQTT_USER, MQTT_PASS)
+    client.username_pw_set(MQTT_USER, MQTT_PASS)
     print("Connecting to MQTT broker")
     client.connect(MQTT_BROKER, port=1883)
 
@@ -25,7 +26,7 @@ def start_relay():
             if not ret:
                 print("Can't receive frame (stream end?). Exiting ...")
                 break
-            
+
             frame_count += 1
             if frame_count % SKIP_FRAMES != 0:
                 continue
@@ -39,6 +40,7 @@ def start_relay():
         client.disconnect()
         stop_webcam(None)
         print("\nNow you can restart fresh")
+
 
 if __name__ == "__main__":
     start_relay()
