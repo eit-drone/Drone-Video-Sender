@@ -12,9 +12,13 @@ def start_relay():
     client.username_pw_set(MQTT_USER, MQTT_PASS)
     print("Connecting to MQTT broker")
     client.connect(MQTT_BROKER, port=1883)
+    print("Connected to MQTT broker")
 
+    print("Starting webcam")
     stream_url = start_webcam(None)
+    print("Webcam started")
     cap = cv2.VideoCapture(stream_url, cv2.CAP_FFMPEG)
+    print("VideoCapture started")
 
     try:
         frame_count = 0
@@ -29,11 +33,13 @@ def start_relay():
 
             frame_count += 1
             if frame_count % SKIP_FRAMES != 0:
+                print(f"Skipping frame {frame_count}")
                 continue
 
             buffer = cv2.imencode(".jpg", frame)[1].tobytes()
             jpg_as_packed = struct.pack(f"{len(buffer)}B", *buffer)
 
+            print(f"Publishing frame {frame_count}")
             client.publish(MQTT_TOPIC, jpg_as_packed, qos=0, retain=False)
     finally:
         cap.release()
