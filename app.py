@@ -4,10 +4,10 @@
 """Usb demo"""
 
 import argparse
-import cv2
 import signal
 from typing import Final
 from pathlib import Path
+import subprocess
 
 from rich.console import Console
 
@@ -18,8 +18,6 @@ console = Console()  # rich consoler printer
 
 STREAM_URL: Final[str] = r"udp://0.0.0.0:8554"
 
-import subprocess
-import cv2
 
 
 def resend_stream_to_rtmp(source: str, rtmp_url: str):
