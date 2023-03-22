@@ -1,8 +1,9 @@
 import base64
 import numpy as np
 import paho.mqtt.client as mqtt
-from mqtt_options import MQTT_BROKER, MQTT_TOPIC, MQTT_USER, MQTT_PASS
+from mqtt_options import MQTT_BROKER, MQTT_TOPIC, MQTT_USER, MQTT_PASS, MQTT_TIMING_TOPIC
 import cv2
+import datetime
 
 frame = np.zeros((240, 320, 3), np.uint8)
 
@@ -10,10 +11,16 @@ frame = np.zeros((240, 320, 3), np.uint8)
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
     client.subscribe(MQTT_TOPIC)
+    client.subscribe(MQTT_TIMING_TOPIC)
 
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
+    if msg.topic == MQTT_TIMING_TOPIC:
+        sent = datetime.datetime.fromisoformat(msg.payload.decode("utf-8"))
+        print(f"Received frame at {datetime.datetime.utcnow()} (sent at {sent}), delay: {datetime.datetime.utcnow() - sent}")
+        return
+
     global frame
     # Decoding the message
     # converting into numpy array from buffer

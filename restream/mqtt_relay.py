@@ -1,8 +1,9 @@
 import cv2
 import paho.mqtt.client as mqtt
 import struct
-from mqtt_options import MQTT_BROKER, MQTT_TOPIC, MQTT_PASS, MQTT_USER
+from mqtt_options import MQTT_BROKER, MQTT_TOPIC, MQTT_PASS, MQTT_USER, MQTT_TIMING_TOPIC
 from camera_handle import start_webcam, stop_webcam
+import datetime
 
 SKIP_FRAMES = 30
 
@@ -42,6 +43,7 @@ def start_relay():
 
             print(f"Publishing frame {frame_count}")
             client.publish(MQTT_TOPIC, jpg_as_packed, qos=0, retain=False)
+            client.publish(MQTT_TIMING_TOPIC, datetime.datetime.utcnow().isoformat(), qos=0, retain=False)
     finally:
         cap.release()
         client.disconnect()

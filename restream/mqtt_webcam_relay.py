@@ -1,13 +1,14 @@
 import cv2
 import paho.mqtt.client as mqtt
 import struct
-from mqtt_options import MQTT_BROKER, MQTT_TOPIC
+from mqtt_options import MQTT_BROKER, MQTT_TOPIC, MQTT_TIMING_TOPIC, MQTT_PASS, MQTT_USER
+import datetime
 
 SKIP_FRAMES = 10
 
 def start_relay():
     client = mqtt.Client()
-    #client.username_pw_set(MQTT_USER, MQTT_PASS)
+    client.username_pw_set(MQTT_USER, MQTT_PASS)
     print("Connecting to MQTT broker")
     client.connect(MQTT_BROKER, port=1883)
 
@@ -32,6 +33,7 @@ def start_relay():
             jpg_as_packed = struct.pack(f"{len(buffer)}B", *buffer)
 
             client.publish(MQTT_TOPIC, jpg_as_packed, qos=0)
+            client.publish(MQTT_TIMING_TOPIC, datetime.datetime.utcnow().isoformat(), qos=0, retain=False)
     finally:
         cap.release()
         client.disconnect()
