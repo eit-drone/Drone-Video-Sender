@@ -35,7 +35,8 @@ def start_relay():
             if frame_count % SKIP_FRAMES != 0:
                 print(f"Skipping frame {frame_count}")
                 continue
-
+            
+            frame = cv2.resize(frame, (640, 480))
             buffer = cv2.imencode(".jpg", frame)[1].tobytes()
             jpg_as_packed = struct.pack(f"{len(buffer)}B", *buffer)
 
