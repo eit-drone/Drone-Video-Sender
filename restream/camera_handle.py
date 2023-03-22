@@ -19,4 +19,4 @@ def start_webcam(identifier: str) -> str:
         gopro.http_command.wired_usb_control(control=Params.Toggle.DISABLE)
         assert gopro.http_command.webcam_start().is_ok
 
-        return STREAM_URL
+        return f"{STREAM_URL}?overrun_nonfatal=1&fifo_size=500000"
