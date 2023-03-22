@@ -1,11 +1,10 @@
 import cv2
 import paho.mqtt.client as mqtt
 import struct
-from mqtt_options import MQTT_BROKER, MQTT_TOPIC, MQTT_PASS, MQTT_USER, MQTT_TIMING_TOPIC
+from mqtt_options import MQTT_BROKER, MQTT_TOPIC, MQTT_PASS, MQTT_USER, make_timing_data
 from camera_handle import start_webcam, stop_webcam
-import datetime
 
-SKIP_FRAMES = 30
+SKIP_FRAMES = 10
 
 
 def start_relay():
@@ -34,15 +33,10 @@ def start_relay():
 
             frame_count += 1
             if frame_count % SKIP_FRAMES != 0:
-                print(f"Skipping frame {frame_count}")
                 continue
             
-            buffer = cv2.imencode(".jpg", frame)[1].tobytes()
-            jpg_as_packed = struct.pack(f"{len(buffer)}B", *buffer)
-
             print(f"Publishing frame {frame_count}")
-            client.publish(MQTT_TOPIC, jpg_as_packed, qos=0, retain=False)
-            client.publish(MQTT_TIMING_TOPIC, datetime.datetime.utcnow().isoformat(), qos=0, retain=False)
+            client.publish(MQTT_TOPIC, make_timing_data(frame_count, frame), qos=0, retain=False)
     finally:
         cap.release()
         client.disconnect()
