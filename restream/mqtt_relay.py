@@ -4,7 +4,7 @@ import struct
 from mqtt_options import MQTT_BROKER, MQTT_TOPIC
 from camera_handle import start_webcam, stop_webcam
 
-SKIP_FRAMES = 10
+SKIP_FRAMES = 30
 
 def start_relay():
     client = mqtt.Client()
@@ -33,7 +33,7 @@ def start_relay():
             buffer = cv2.imencode(".jpg", frame)[1].tobytes()
             jpg_as_packed = struct.pack(f"{len(buffer)}B", *buffer)
 
-            client.publish(MQTT_TOPIC, jpg_as_packed, qos=0)
+            client.publish(MQTT_TOPIC, jpg_as_packed, qos=0, retain=False)
     finally:
         cap.release()
         client.disconnect()
