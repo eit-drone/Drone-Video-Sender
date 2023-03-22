@@ -17,6 +17,7 @@ def start_relay():
     stream_url = start_webcam(None)
     print("Webcam started")
     cap = cv2.VideoCapture(stream_url, cv2.CAP_FFMPEG)
+    cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
     print("VideoCapture started")
 
     try:
