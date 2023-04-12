@@ -1,7 +1,6 @@
 import cv2
 import paho.mqtt.client as mqtt
-import struct
-from mqtt_options import MQTT_BROKER, MQTT_TOPIC, MQTT_PASS, MQTT_USER, make_timing_data
+from .mqtt_options import MQTT_BROKER, MQTT_TOPIC, MQTT_PASS, MQTT_USER, make_timing_data
 
 SKIP_FRAMES = 10
 
