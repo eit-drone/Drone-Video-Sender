@@ -1,8 +1,15 @@
 import cv2
 import paho.mqtt.client as mqtt
-from .mqtt_options import MQTT_BROKER, MQTT_TOPIC, MQTT_PASS, MQTT_USER, make_timing_data
+from .mqtt_options import (
+    MQTT_BROKER,
+    MQTT_TOPIC,
+    MQTT_PASS,
+    MQTT_USER,
+    make_timing_data,
+)
 
 SKIP_FRAMES = 10
+
 
 def start_relay():
     client = mqtt.Client()
@@ -22,16 +29,15 @@ def start_relay():
             if not ret:
                 print("Can't receive frame (stream end?). Exiting ...")
                 break
-            
+
             frame_count += 1
             if frame_count % SKIP_FRAMES != 0:
                 continue
 
-            client.publish(MQTT_TOPIC, make_timing_data(frame_count, frame), qos=0, retain=False)
+            client.publish(
+                MQTT_TOPIC, make_timing_data(frame_count, frame), qos=0, retain=False
+            )
     finally:
         cap.release()
         client.disconnect()
         print("\nNow you can restart fresh")
-
-if __name__ == "__main__":
-    start_relay()

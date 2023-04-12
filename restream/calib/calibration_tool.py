@@ -51,7 +51,3 @@ def make_dataset():
         counter = record_video_type(dataset, cap, type, counter)
 
     cap.shutdown()
-
-
-if __name__ == "__main__":
-    make_dataset()

@@ -1,6 +1,4 @@
-import argparse
 from typing import Final
-from pathlib import Path
 
 from open_gopro import WiredGoPro, Params
 

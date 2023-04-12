@@ -1,8 +1,17 @@
 # Drone Video Sending Components
 
-## Calibration tool
+## Setup
 
-Run with
 ```bash
-PYTHONPATH=./ python restream/calib/calibration_tool.py
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Run
+
+Remember to do `source venv/bin/activate` before running any of the following commands.
+
+```bash
+python -m restream
 ```

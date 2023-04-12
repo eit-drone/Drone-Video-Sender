@@ -90,7 +90,3 @@ def listen_for_frames():
 
     # Stop the Thread
     client.loop_stop()
-
-
-if __name__ == "__main__":
-    listen_for_frames()
