@@ -41,8 +41,9 @@ def start_relay():
             frame_count += 1
             if frame_count % SKIP_FRAMES != 0:
                 continue
-
+            
             print(f"Publishing frame {frame_count}")
+            frame = cv2.rotate(frame, cv2.ROTATE_180)
             client.publish(
                 MQTT_TOPIC, make_timing_data(frame_count, frame), qos=0, retain=False
             )
