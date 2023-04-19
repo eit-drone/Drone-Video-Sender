@@ -11,7 +11,7 @@ MQTT_PASS = "hello123"
 TIMESTAMP_LEN = len(datetime.datetime.now().isoformat().encode("utf-8"))
 
 def make_timing_data(frame_number: int, frame, print_func = print) -> str:
-    frame = cv2.resize(frame, (720, 480))
+    #frame = cv2.resize(frame, (720, 480))
     buffer = cv2.imencode(".jpg", frame)[1].tobytes()
     jpg_as_packed = struct.pack(f"{len(buffer)}B", *buffer)
 

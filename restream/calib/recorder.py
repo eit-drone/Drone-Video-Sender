@@ -1,12 +1,10 @@
 import cv2 as cv
-from restream.mqtt_recv import MQTTVideoStream
-
 
 def record_cap_to_file(
-    cap: MQTTVideoStream, filename: str, fps: float = 30.0, size=(1920, 1080)
+    cap, filename: str, fps: float = 30.0, size=None
 ):
-    fourcc = cv.VideoWriter_fourcc(*"MP4V")
-    out = cv.VideoWriter(filename, fourcc, fps, size)
+    fourcc = cv.VideoWriter_fourcc(*"mp4v")
+    out = None
     
     print("Press q to stop recording.")
 
@@ -18,7 +16,12 @@ def record_cap_to_file(
         if frame is None:
             continue
 
-        # write the flipped frame
+        if out is None:
+            if size is None:
+                size = frame.shape[1], frame.shape[0]
+            out = cv.VideoWriter(filename, fourcc, fps, size)
+        
+        print(frame.shape)
         out.write(frame)
         cv.imshow("Frame", frame)
 

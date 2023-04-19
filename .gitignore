@@ -3,3 +3,7 @@ venv
 *.log
 
 **/__pycache__
+
+recordings
+
+.DS_Store

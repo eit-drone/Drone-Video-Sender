@@ -1,4 +1,4 @@
-import base64
+import os
 import numpy as np
 import paho.mqtt.client as mqtt
 from .mqtt_options import (
@@ -9,11 +9,13 @@ from .mqtt_options import (
     parse_timing_frame,
 )
 import cv2
+import restream.calib.recorder as recorder
+import time
 
 
 class MQTTVideoStream:
     def __init__(self, silent=False) -> None:
-        self.frame = np.zeros((240, 320, 3), np.uint8)
+        self.frame = None
         self.client = None
         self.silent = silent
 
@@ -71,6 +73,20 @@ def on_message(client, userdata, msg):
     # Decode to Original Frame
     frame = cv2.imdecode(npimg, 1)
 
+
+def record_stream():
+    cap = MQTTVideoStream(silent=True)
+    cap.listen_for_frames()
+
+    if not os.path.exists("recordings"):
+        os.makedirs("recordings")
+
+    while True:
+        recorder.record_cap_to_file(cap, f"recordings/record{time.strftime('%Y%m%d-%H%M%S')}.mp4", fps=6)
+
+        if input("Do you want to record another video? [y/n]") != "y":
+            break
+    cap.shutdown()
 
 def listen_for_frames():
     client = mqtt.Client()
